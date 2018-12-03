@@ -7,7 +7,8 @@
     "prettier:js": "prettier --write --parser=flow '*.js'",
     "day01-1": "babel-node day01-1.js",
     "day01-2": "babel-node day01-2.js",
-    "day02-1": "babel-node day02-1.js"
+    "day02-1": "babel-node day02-1.js",
+    "day02-2": "babel-node day02-2.js"
   },
   "dependencies": {
     "@babel/core": "^7.1.6",
