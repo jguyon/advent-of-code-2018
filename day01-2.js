@@ -41,7 +41,7 @@ const findRepeatFreq = (changes: number[]) => {
   }
 };
 
-console.log("Input frequencies then press <ctrl-D>:");
+console.log("Input frequency changes then press <ctrl-D>:");
 
 getInputLines()
   .then(parseChanges)

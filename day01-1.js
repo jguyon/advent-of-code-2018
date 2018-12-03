@@ -28,7 +28,7 @@ const parseChanges = (lines: string[]) =>
 const calcFreq = (changes: number[]) =>
   changes.reduce((freq, change) => freq + change, 0);
 
-console.log("Input frequencies then press <ctrl-D>:");
+console.log("Input frequency changes then press <ctrl-D>:");
 
 getInputLines()
   .then(parseChanges)
