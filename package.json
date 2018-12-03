@@ -5,7 +5,8 @@
     "prettier": "run-s prettier:json prettier:js",
     "prettier:json": "prettier --write --parser=json package.json",
     "prettier:js": "prettier --write --parser=flow '*.js'",
-    "day01-1": "babel-node day01-1.js"
+    "day01-1": "babel-node day01-1.js",
+    "day01-2": "babel-node day01-2.js"
   },
   "dependencies": {
     "@babel/core": "^7.1.6",
