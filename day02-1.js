@@ -14,27 +14,25 @@ const getInputLines = () =>
     });
   });
 
+const parseIDs = (lines: string[]) => lines.map(line => line.trim().split(""));
+
 type LetterCounts = {|
   hasTwo: boolean,
   hasThree: boolean
 |};
 
-const getLetterCounts = (lines: string[]): LetterCounts[] =>
-  lines.map(line => {
+const getLetterCounts = (ids: string[][]): LetterCounts[] =>
+  ids.map(id => {
     const counts = new Map<string, number>();
+    id.forEach(letter => {
+      const letterCount = counts.get(letter);
 
-    line
-      .trim()
-      .split("")
-      .forEach(letter => {
-        const letterCount = counts.get(letter);
-
-        if (letterCount === undefined) {
-          counts.set(letter, 1);
-        } else {
-          counts.set(letter, letterCount + 1);
-        }
-      });
+      if (letterCount === undefined) {
+        counts.set(letter, 1);
+      } else {
+        counts.set(letter, letterCount + 1);
+      }
+    });
 
     let hasTwo = false;
     let hasThree = false;
@@ -67,6 +65,7 @@ const calcChecksum = (letterCounts: LetterCounts[]) => {
 console.log("Input box IDs then press <ctrl-D>:");
 
 getInputLines()
+  .then(parseIDs)
   .then(getLetterCounts)
   .then(calcChecksum)
   .then(
