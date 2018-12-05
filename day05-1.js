@@ -18,21 +18,6 @@ const getInputLine = () =>
     });
   });
 
-const getInputLines = () =>
-  new Promise(resolve => {
-    const lines: string[] = [];
-    const rl = readline.createInterface({
-      input: process.stdin,
-      escapeCodeTimeout: 10000
-    });
-
-    rl.on("line", (nextLine: string) => {
-      lines.push(nextLine);
-    }).on("close", () => {
-      resolve(lines);
-    });
-  });
-
 const parsePolymer = (line: string) => {
   const polymer: number[] = [];
 
