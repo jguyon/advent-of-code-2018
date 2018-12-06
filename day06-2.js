@@ -43,6 +43,12 @@ const parseCoords = (lines: string[]): Point[] =>
     }
   });
 
+const manhattanDistance = (pointA: Point, pointB: Point) =>
+  Math.abs(pointA.x - pointB.x) + Math.abs(pointA.y - pointB.y);
+
+const sumDistancesAt = (at: Point, coords: Point[]) =>
+  coords.reduce((sum, point) => sum + manhattanDistance(at, point), 0);
+
 type Bounds = {|
   left: number,
   right: number,
@@ -50,26 +56,11 @@ type Bounds = {|
   bottom: number
 |};
 
-const computeBounds = (maxDistance: number, coords: Point[]) => {
-  const right = coords.reduce(
-    (max, { x }) => Math.max(max, x + maxDistance),
-    maxDistance
-  );
-
-  const left = coords.reduce(
-    (min, { x }) => Math.min(min, x - maxDistance),
-    right
-  );
-
-  const bottom = coords.reduce(
-    (max, { y }) => Math.max(max, y + maxDistance),
-    maxDistance
-  );
-
-  const top = coords.reduce(
-    (min, { y }) => Math.min(min, y - maxDistance),
-    bottom
-  );
+const computeCloseBounds = (coords: Point[]): Bounds => {
+  const right = coords.reduce((max, { x }) => Math.max(max, x), 0);
+  const left = coords.reduce((min, { x }) => Math.min(min, x), right);
+  const bottom = coords.reduce((max, { y }) => Math.max(max, y), 0);
+  const top = coords.reduce((min, { y }) => Math.min(min, y), bottom);
 
   return {
     left,
@@ -79,11 +70,92 @@ const computeBounds = (maxDistance: number, coords: Point[]) => {
   };
 };
 
-const manhattanDistance = (pointA: Point, pointB: Point) =>
-  Math.abs(pointA.x - pointB.x) + Math.abs(pointA.y - pointB.y);
+const computeBounds = (maxDistance: number, coords: Point[]) => {
+  const closeBounds = computeCloseBounds(coords);
 
-const sumDistancesAt = (at: Point, coords: Point[]) =>
-  coords.reduce((sum, point) => sum + manhattanDistance(at, point), 0);
+  let left = closeBounds.left - 1;
+  for (let boundary = false; !boundary; left--) {
+    const x = left;
+    boundary = true;
+
+    for (
+      let y = closeBounds.top - maxDistance;
+      y <= closeBounds.bottom + maxDistance;
+      y++
+    ) {
+      const sum = sumDistancesAt({ x, y }, coords);
+
+      if (sum < maxDistance) {
+        boundary = false;
+      }
+    }
+  }
+  left++;
+
+  let right = closeBounds.right + 1;
+  for (let boundary = false; !boundary; right++) {
+    const x = right;
+    boundary = true;
+
+    for (
+      let y = closeBounds.top - maxDistance;
+      y <= closeBounds.bottom + maxDistance;
+      y++
+    ) {
+      const sum = sumDistancesAt({ x, y }, coords);
+
+      if (sum < maxDistance) {
+        boundary = false;
+      }
+    }
+  }
+  right--;
+
+  let top = closeBounds.top - 1;
+  for (let boundary = false; !boundary; top--) {
+    const y = top;
+    boundary = true;
+
+    for (
+      let x = closeBounds.left - maxDistance;
+      x <= closeBounds.right + maxDistance;
+      x++
+    ) {
+      const sum = sumDistancesAt({ x, y }, coords);
+
+      if (sum < maxDistance) {
+        boundary = false;
+      }
+    }
+  }
+  top++;
+
+  let bottom = closeBounds.bottom + 1;
+  for (let boundary = false; !boundary; bottom++) {
+    const y = bottom;
+    boundary = true;
+
+    for (
+      let x = closeBounds.left - maxDistance;
+      x <= closeBounds.right + maxDistance;
+      x++
+    ) {
+      const sum = sumDistancesAt({ x, y }, coords);
+
+      if (sum < maxDistance) {
+        boundary = false;
+      }
+    }
+  }
+  bottom--;
+
+  return {
+    left,
+    right,
+    top,
+    bottom
+  };
+};
 
 const computeMaxDistanceRegionSize = (maxDistance: number, coords: Point[]) => {
   const { left, right, top, bottom } = computeBounds(maxDistance, coords);
