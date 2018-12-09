@@ -17,7 +17,8 @@
     "day05-2": "babel-node day05-2.js",
     "day06-1": "babel-node day06-1.js",
     "day06-2": "babel-node day06-2.js",
-    "day07-1": "babel-node day07-1.js"
+    "day07-1": "babel-node day07-1.js",
+    "day07-2": "babel-node day07-2.js"
   },
   "dependencies": {
     "@babel/core": "^7.1.6",
